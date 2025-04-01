@@ -18,8 +18,6 @@ interface FormData {
   bathrooms: string;
   square_feet: string;
   images: string[];
-  latitude?: number;
-  longitude?: number;
 }
 
 interface Location {
@@ -118,8 +116,6 @@ export default function NewProperty() {
         square_feet: parseFloat(formData.square_feet),
         images: formData.images.filter(url => url.trim() !== ''),
         owner_id: user.id,
-        latitude: formData.latitude ? parseFloat(formData.latitude.toString()) : null,
-        longitude: formData.longitude ? parseFloat(formData.longitude.toString()) : null,
       };
 
       const { error: insertError } = await supabase
@@ -153,8 +149,6 @@ export default function NewProperty() {
     setFormData(prev => ({
       ...prev,
       address: location.display_name,
-      latitude: parseFloat(location.lat),
-      longitude: parseFloat(location.lon),
     }));
     setSearchQuery(location.display_name);
     setShowSuggestions(false);

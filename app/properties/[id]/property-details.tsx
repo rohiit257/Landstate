@@ -20,8 +20,6 @@ interface Property {
   address: string;
   images: string[];
   owner_id: string;
-  latitude?: number;
-  longitude?: number;
 }
 
 interface PropertyDetailsProps {
@@ -31,9 +29,8 @@ interface PropertyDetailsProps {
 // Simple static map component
 function StaticMap({ coordinates }: { coordinates: [number, number] }) {
   const [lat, lng] = coordinates;
-  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x400&markers=color:red%7C${lat},${lng}&key=YOUR_GOOGLE_MAPS_API_KEY`;
   
-  // Alternative using OpenStreetMap static map
+  // Using OpenStreetMap static map
   const osmMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.01}%2C${lat-0.01}%2C${lng+0.01}%2C${lat+0.01}&marker=${lat}%2C${lng}&layer=mapnik`;
   
   return (
@@ -89,12 +86,8 @@ export default function PropertyDetails({ id }: PropertyDetailsProps) {
           setContactEmail(user.email);
         }
 
-        // If property has coordinates, set them
-        if (propertyData.latitude && propertyData.longitude) {
-          console.log('Using stored coordinates:', propertyData.latitude, propertyData.longitude);
-          setCoordinates([propertyData.latitude, propertyData.longitude]);
-        } else if (propertyData.address) {
-          // Geocode the address if coordinates are not available
+        // Geocode the address to get coordinates for the map
+        if (propertyData.address) {
           try {
             console.log('Geocoding address:', propertyData.address);
             const response = await fetch(
